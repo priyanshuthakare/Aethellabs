@@ -32,30 +32,23 @@ const contentBlocks = [
 
 export const AboutUsSection = (): JSX.Element => {
   return (
-    <section className="flex flex-col items-center gap-[84px] pt-[103px] pb-0 px-2.5 w-full mt-[-155px]">
-      <h2 className="[font-family:'Inter',Helvetica] font-normal text-transparent text-[55px] text-center tracking-[0] leading-[normal]">
+    <section id="about" className="flex flex-col items-center gap-16 py-20 px-4 w-full bg-black">
+      <h2 className="[font-family:'Inter',Helvetica] font-normal text-[55px] text-center tracking-[0] leading-[normal]">
         <span className="font-semibold text-white">ABOUT </span>
         <span className="font-semibold text-[#5f34fb]">US</span>
       </h2>
 
-      <div className="flex flex-col items-center justify-center gap-[21px] w-full max-w-[1106px]">
+      <div className="flex flex-col items-center justify-center gap-6 w-full max-w-[1106px] mx-auto">
         {contentBlocks.map((block, index) => (
           <Card
             key={index}
-            className={`w-full ${
-              block.type === "solid"
-                ? "max-w-[1040.75px] bg-[#4e2bcd] border-0"
-                : "max-w-[822px] bg-[#00000000] border-[#a975f8] shadow-[inset_0px_0px_26.5px_#5f34fb52,inset_0_1px_0_rgba(255,255,255,0.40),inset_1px_0_0_rgba(255,255,255,0.32),inset_0_-1px_1px_rgba(0,0,0,0.13),inset_-1px_0_1px_rgba(0,0,0,0.11)] backdrop-blur-[2.0px] backdrop-brightness-[110%] [-webkit-backdrop-filter:blur(2.0px)_brightness(110%)]"
-            } rounded-[9px] overflow-hidden`}
+            className={`w-full ${block.type === "solid"
+              ? "bg-[#4e2bcd] border-0"
+              : "bg-transparent border border-[#a975f8] shadow-[inset_0px_0px_26.5px_#5f34fb52]"
+              } rounded-[9px] overflow-hidden transition-transform hover:scale-[1.01] duration-300`}
           >
-            <CardContent
-              className={`flex items-center justify-center ${
-                block.type === "solid"
-                  ? "py-[9px] px-[21px]"
-                  : "py-[22px] px-[146px]"
-              }`}
-            >
-              <p className="[font-family:'Inter',Helvetica] font-normal text-white text-xl text-center tracking-[0] leading-[normal]">
+            <CardContent className="flex items-center justify-center py-8 px-8 md:px-20">
+              <p className="[font-family:'Inter',Helvetica] font-normal text-white text-xl text-center leading-relaxed">
                 {block.content || block.text}
               </p>
             </CardContent>

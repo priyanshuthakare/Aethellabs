@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
@@ -6,9 +6,65 @@ import GlassSurface from "../../../../components/ui/GlassSurface";
 
 export const ContactUsSection = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
 
-    const handleSubmit = () => {
-        setIsSubmitted(true);
+    const formInputs = useRef({});
+
+    const handleInputChange = (id, value) => {
+        formInputs.current[id] = value;
+    };
+
+    const handleSubmit = async () => {
+        setError("");
+        setIsLoading(true);
+
+        try {
+            // Validate required fields
+            if (!formInputs.current["name"] || !formInputs.current["your-email"]) {
+                setError("Name and email are required");
+                setIsLoading(false);
+                return;
+            }
+
+            const name = formInputs.current["name"];
+            const email = formInputs.current["your-email"];
+            const website = formInputs.current["website"] || "Not provided";
+            const servicesOfInterest = formInputs.current["services-of-interest"] || "Not specified";
+            const projectTimeline = formInputs.current["project-timeline"] || "Not specified";
+            const primaryBusinessChallenge = formInputs.current["primary-business-challenge"] || "Not specified";
+            const estimatedBudget = formInputs.current["estimated-budget-for-this-project"] || "Not specified";
+
+            // Use Formspree (no backend needed, free tier available)
+            const response = await fetch("https://formspree.io/f/mpwgbqae", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    website: website,
+                    servicesOfInterest: servicesOfInterest,
+                    projectTimeline: projectTimeline,
+                    primaryBusinessChallenge: primaryBusinessChallenge,
+                    estimatedBudget: estimatedBudget,
+                    _subject: `New Contact Form Submission from ${name}`
+                })
+            });
+
+            if (response.ok) {
+                setIsSubmitted(true);
+                formInputs.current = {};
+            } else {
+                setError("Failed to submit form. Please try again.");
+            }
+        } catch (err) {
+            setError("Error submitting form: " + err.message);
+            console.error("Form submission error:", err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -70,6 +126,8 @@ export const ContactUsSection = () => {
                                         <Input
                                             id="name"
                                             className="w-[240.17px] h-8 bg-black rounded border border-solid border-[#5f34fb] text-white"
+                                            onChange={(e) => handleInputChange("name", e.target.value)}
+                                            placeholder="Enter your name"
                                         />
                                     </div>
 
@@ -83,6 +141,8 @@ export const ContactUsSection = () => {
                                         <Input
                                             id="website"
                                             className="w-[240.17px] h-8 bg-black rounded border border-solid border-[#5f34fb] text-white"
+                                            onChange={(e) => handleInputChange("website", e.target.value)}
+                                            placeholder="https://example.com"
                                         />
                                     </div>
                                 </div>
@@ -106,15 +166,26 @@ export const ContactUsSection = () => {
                                             id={label.toLowerCase().replace(/ /g, '-')}
                                             type={label === "Estimated Budget For This Project" ? "number" : "text"}
                                             className="w-[509px] h-8 bg-black rounded border border-solid border-[#5f34fb] text-white"
+                                            onChange={(e) => handleInputChange(label.toLowerCase().replace(/ /g, '-'), e.target.value)}
+                                            placeholder={label === "Your Email" ? "your@email.com" : ""}
                                         />
                                     </div>
                                 ))}
 
+                                {error && (
+                                    <div className="absolute top-[650px] left-[62px] w-[511px] p-3 bg-red-500/20 border border-red-500 rounded">
+                                        <p className="[font-family:'Inter',Helvetica] font-normal text-red-400 text-sm">
+                                            {error}
+                                        </p>
+                                    </div>
+                                )}
+
                                 <Button
                                     onClick={handleSubmit}
-                                    className="absolute top-[694px] left-[150px] w-[352px] h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] [font-family:'Inter',Helvetica] font-medium text-white text-2xl text-center tracking-[0] leading-[normal] hover:bg-[#4e2bcd]/90"
+                                    disabled={isLoading}
+                                    className="absolute top-[694px] left-[150px] w-[352px] h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] [font-family:'Inter',Helvetica] font-medium text-white text-2xl text-center tracking-[0] leading-[normal] hover:bg-[#4e2bcd]/90 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Book a consultation
+                                    {isLoading ? "Submitting..." : "Book a consultation"}
                                 </Button>
                             </>
                         )}

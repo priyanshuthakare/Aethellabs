@@ -1,8 +1,5 @@
 import { useState, useRef } from "react";
-import { Button } from "../../../../components/ui/button";
-import { Input } from "../../../../components/ui/input";
-import { Label } from "../../../../components/ui/label";
-import GlassSurface from "../../../../components/ui/GlassSurface";
+import { Mail, ArrowRight, CheckCircle, ChevronRight, Sparkles } from "lucide-react";
 
 export const ContactUsSection = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -20,36 +17,21 @@ export const ContactUsSection = () => {
         setIsLoading(true);
 
         try {
-            // Validate required fields
-            if (!formInputs.current["name"] || !formInputs.current["your-email"]) {
+            if (!formInputs.current["name"] || !formInputs.current["email"]) {
                 setError("Name and email are required");
                 setIsLoading(false);
                 return;
             }
 
-            const name = formInputs.current["name"];
-            const email = formInputs.current["your-email"];
-            const website = formInputs.current["website"] || "Not provided";
-            const servicesOfInterest = formInputs.current["services-of-interest"] || "Not specified";
-            const projectTimeline = formInputs.current["project-timeline"] || "Not specified";
-            const primaryBusinessChallenge = formInputs.current["primary-business-challenge"] || "Not specified";
-            const estimatedBudget = formInputs.current["estimated-budget-for-this-project"] || "Not specified";
-
-            // Use Formspree (no backend needed, free tier available)
             const response = await fetch("https://formspree.io/f/mpwgbqae", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    website: website,
-                    servicesOfInterest: servicesOfInterest,
-                    projectTimeline: projectTimeline,
-                    primaryBusinessChallenge: primaryBusinessChallenge,
-                    estimatedBudget: estimatedBudget,
-                    _subject: `New Contact Form Submission from ${name}`
+                    name: formInputs.current["name"],
+                    email: formInputs.current["email"],
+                    company: formInputs.current["company"] || "Not provided",
+                    message: formInputs.current["message"] || "No message",
+                    _subject: `New Contact from ${formInputs.current["name"]}`
                 })
             });
 
@@ -57,139 +39,141 @@ export const ContactUsSection = () => {
                 setIsSubmitted(true);
                 formInputs.current = {};
             } else {
-                setError("Failed to submit form. Please try again.");
+                setError("Failed to submit. Please try again.");
             }
         } catch (err) {
-            setError("Error submitting form: " + err.message);
-            console.error("Form submission error:", err);
+            setError("Error: " + err.message);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <section id="contact" className="flex items-start justify-end gap-2.5 px-[91px] py-20 relative w-full bg-black">
-            <div className="relative w-full max-w-[1440px] mx-auto h-[904px]">
-                {/* Background with content */}
-                <div className="absolute w-[98.11%] h-[100.12%] top-[2.95%] left-0 pointer-events-none">
-                    <img
-                        className="absolute w-[99.72%] top-0 left-0 h-[904px] object-cover"
-                        alt="Background"
-                        src="/image 54.png"
-                    />
+        <section id="contact" className="py-20 px-4 bg-gray-50">
+            <div className="w-full max-w-[1200px] mx-auto">
+                {/* CTA Header */}
+                <div className="bg-aethel-gradient rounded-4xl p-12 md:p-16 text-center relative overflow-hidden">
+                    {/* Glow effects */}
+                    <div className="absolute -left-40 top-1/2 w-80 h-80 bg-aethel-500/20 rounded-full blur-3xl" />
+                    <div className="absolute -right-40 bottom-0 w-60 h-60 bg-aethel-500/10 rounded-full blur-3xl" />
 
-                    <h2 className="absolute w-[45.45%] top-[3.94%] left-[3.61%] [font-family:'Inter',Helvetica] font-bold text-[55px] tracking-[0] leading-[normal]">
-                        <span className="text-white">Start </span>
-                        <span className="text-[#5f34fb]">Your </span>
-                        <span className="text-white">Automation Journey</span>
-                    </h2>
-
-                    <p className="absolute w-[41.33%] top-[22.01%] left-[3.61%] [font-family:'Inter',Helvetica] font-normal text-white text-xl tracking-[0] leading-[normal]">
-                        Ready to transform your business with AI? Let's discuss how Aethel
-                        Labs can accelerate your digital transformation.
-                    </p>
+                    <div className="relative z-10">
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
+                            Make your AI automation<br />journey easy
+                        </h2>
+                        <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+                            Join more than <span className="font-bold text-white">975+ businesses</span> that have enjoyed
+                            working with a capable and trustworthy partner.
+                        </p>
+                        <button
+                            onClick={() => window.open("https://cal.com/aethellabs/discovery", "_blank")}
+                            className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-navy-900 font-semibold text-lg px-8 py-4 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
+                        >
+                            Speak with our team
+                            <ChevronRight className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Contact Form */}
-                <div className="absolute right-0 top-0 pointer-events-auto">
-                    <GlassSurface
-                        width={598}
-                        height={800}
-                        borderRadius={11}
-                        backgroundOpacity={0}
-                        className="border border-solid border-[#a975f8] shadow-[inset_0px_0px_26.5px_#5f34fb52,inset_0_1px_0_rgba(255,255,255,0.40),inset_1px_0_0_rgba(255,255,255,0.32),inset_0_-1px_1px_rgba(0,0,0,0.13),inset_-1px_0_1px_rgba(0,0,0,0.11)]"
-                    >
+                <div className="mt-16">
+                    <div className="text-center mb-8">
+                        <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                            Or send us a message
+                        </h3>
+                        <p className="text-gray-600">We'll get back to you within 24 hours.</p>
+                    </div>
+
+                    <div className="bg-white rounded-3xl shadow-soft border border-gray-100 p-8 md:p-12 max-w-3xl mx-auto">
                         {isSubmitted ? (
-                            <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
-                                <h3 className="[font-family:'Inter',Helvetica] font-bold text-white text-[40px] mb-6 tracking-[0] leading-[normal]">
+                            <div className="flex flex-col items-center justify-center py-8 text-center">
+                                <div className="w-16 h-16 bg-aethel-100 rounded-full flex items-center justify-center mb-6">
+                                    <CheckCircle className="w-8 h-8 text-aethel-500" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-3">
                                     Thank You!
                                 </h3>
-                                <p className="[font-family:'Inter',Helvetica] font-normal text-white text-2xl tracking-[0] leading-[normal]">
-                                    We will contact you as soon as possible.
+                                <p className="text-lg text-gray-600">
+                                    We'll get back to you within 24 hours.
                                 </p>
                             </div>
                         ) : (
-                            <>
-                                <h3 className="absolute top-3.5 left-[211px] [font-family:'Inter',Helvetica] font-light text-white text-[40px] tracking-[0] leading-[normal] whitespace-nowrap">
-                                    Contact Us
-                                </h3>
-
-                                {/* Name and Website */}
-                                <div className="absolute top-[105px] left-[62px] flex gap-[27px]">
-                                    <div className="flex flex-col gap-[7px]">
-                                        <Label
-                                            htmlFor="name"
-                                            className="[font-family:'Inter',Helvetica] font-normal text-white text-xl tracking-[0] leading-[normal]"
-                                        >
-                                            Your Name
-                                        </Label>
-                                        <Input
-                                            id="name"
-                                            className="w-[240.17px] h-8 bg-black rounded border border-solid border-[#5f34fb] text-white"
-                                            onChange={(e) => handleInputChange("name", e.target.value)}
-                                            placeholder="Enter your name"
-                                        />
-                                    </div>
-
-                                    <div className="flex flex-col gap-[7px]">
-                                        <Label
-                                            htmlFor="website"
-                                            className="[font-family:'Inter',Helvetica] font-normal text-white text-xl tracking-[0] leading-[normal]"
-                                        >
-                                            Company Website
-                                        </Label>
-                                        <Input
-                                            id="website"
-                                            className="w-[240.17px] h-8 bg-black rounded border border-solid border-[#5f34fb] text-white"
-                                            onChange={(e) => handleInputChange("website", e.target.value)}
-                                            placeholder="https://example.com"
-                                        />
-                                    </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Name */}
+                                <div className="flex flex-col gap-2">
+                                    <label htmlFor="name" className="text-sm font-medium text-gray-700">
+                                        Your Name *
+                                    </label>
+                                    <input
+                                        id="name"
+                                        type="text"
+                                        className="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 focus:border-aethel-500 focus:ring-2 focus:ring-aethel-500/20 outline-none transition-all"
+                                        onChange={(e) => handleInputChange("name", e.target.value)}
+                                        placeholder="John Doe"
+                                    />
                                 </div>
 
-                                {/* Full width fields */}
-                                {[
-                                    "Your Email",
-                                    "Services Of Interest",
-                                    "Project Timeline",
-                                    "Primary Business Challenge",
-                                    "Estimated Budget For This Project"
-                                ].map((label, index) => (
-                                    <div key={label} className="absolute left-[62px] w-[511px] flex flex-col gap-[7px]" style={{ top: `${186 + index * 81}px` }}>
-                                        <Label
-                                            htmlFor={label.toLowerCase().replace(/ /g, '-')}
-                                            className="[font-family:'Inter',Helvetica] font-normal text-white text-xl tracking-[0] leading-[normal]"
-                                        >
-                                            {label}
-                                        </Label>
-                                        <Input
-                                            id={label.toLowerCase().replace(/ /g, '-')}
-                                            type={label === "Estimated Budget For This Project" ? "number" : "text"}
-                                            className="w-[509px] h-8 bg-black rounded border border-solid border-[#5f34fb] text-white"
-                                            onChange={(e) => handleInputChange(label.toLowerCase().replace(/ /g, '-'), e.target.value)}
-                                            placeholder={label === "Your Email" ? "your@email.com" : ""}
-                                        />
-                                    </div>
-                                ))}
+                                {/* Email */}
+                                <div className="flex flex-col gap-2">
+                                    <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                                        Email Address *
+                                    </label>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        className="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 focus:border-aethel-500 focus:ring-2 focus:ring-aethel-500/20 outline-none transition-all"
+                                        onChange={(e) => handleInputChange("email", e.target.value)}
+                                        placeholder="you@company.com"
+                                    />
+                                </div>
+
+                                {/* Company */}
+                                <div className="flex flex-col gap-2 md:col-span-2">
+                                    <label htmlFor="company" className="text-sm font-medium text-gray-700">
+                                        Company Name
+                                    </label>
+                                    <input
+                                        id="company"
+                                        type="text"
+                                        className="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 focus:border-aethel-500 focus:ring-2 focus:ring-aethel-500/20 outline-none transition-all"
+                                        onChange={(e) => handleInputChange("company", e.target.value)}
+                                        placeholder="Acme Inc."
+                                    />
+                                </div>
+
+                                {/* Message */}
+                                <div className="flex flex-col gap-2 md:col-span-2">
+                                    <label htmlFor="message" className="text-sm font-medium text-gray-700">
+                                        Tell us about your project
+                                    </label>
+                                    <textarea
+                                        id="message"
+                                        rows={4}
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-800 focus:border-aethel-500 focus:ring-2 focus:ring-aethel-500/20 outline-none transition-all resize-none"
+                                        onChange={(e) => handleInputChange("message", e.target.value)}
+                                        placeholder="What workflows would you like to automate?"
+                                    />
+                                </div>
 
                                 {error && (
-                                    <div className="absolute top-[650px] left-[62px] w-[511px] p-3 bg-red-500/20 border border-red-500 rounded">
-                                        <p className="[font-family:'Inter',Helvetica] font-normal text-red-400 text-sm">
-                                            {error}
-                                        </p>
+                                    <div className="md:col-span-2 p-4 bg-red-50 border border-red-200 rounded-xl">
+                                        <p className="text-red-600 text-sm">{error}</p>
                                     </div>
                                 )}
 
-                                <Button
-                                    onClick={handleSubmit}
-                                    disabled={isLoading}
-                                    className="absolute top-[694px] left-[150px] w-[352px] h-[60px] bg-[#4e2bcd] rounded-[9px] shadow-[inset_0px_4px_4px_#a975f8] [font-family:'Inter',Helvetica] font-medium text-white text-2xl text-center tracking-[0] leading-[normal] hover:bg-[#4e2bcd]/90 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {isLoading ? "Submitting..." : "Book a consultation"}
-                                </Button>
-                            </>
+                                <div className="md:col-span-2">
+                                    <button
+                                        onClick={handleSubmit}
+                                        disabled={isLoading}
+                                        className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-aethel-500 hover:bg-aethel-600 active:bg-aethel-700 text-white font-semibold text-lg px-8 py-4 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {isLoading ? "Sending..." : "Send Message"}
+                                        <ArrowRight className="w-5 h-5" />
+                                    </button>
+                                </div>
+                            </div>
                         )}
-                    </GlassSurface>
+                    </div>
                 </div>
             </div>
         </section>

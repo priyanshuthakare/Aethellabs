@@ -1,100 +1,78 @@
 import React from "react";
-import { Card, CardContent } from "../../../../components/ui/card";
-import GlassSurface from "../../../../components/ui/GlassSurface";
+import { Ear, Search, Wrench, TrendingUp } from "lucide-react";
 
 const approachSteps = [
     {
         number: "01",
         title: "Listen First",
-        description: "We don't walk in with ready-made solutions. We start by listening, to how your team works, where time gets lost, and what goals truly matter to you. Every automation we build begins with understanding, not assumptions.",
-        image: "/image 46.png",
-        isRotated: false,
+        description: "We start by listening—to how your team works, where time gets lost, and what goals truly matter. Every automation begins with understanding.",
+        icon: Ear,
     },
     {
         number: "02",
         title: "Discover the Gaps",
-        description: "Once we see the full picture, we identify the gaps, those silent inefficiencies that slow things down. Then we explore how AI can quietly step in to simplify not complicate.",
-        image: "/image 47.png",
-        isRotated: false,
+        description: "We identify silent inefficiencies that slow things down and explore how AI can quietly step in to simplify, not complicate.",
+        icon: Search,
     },
     {
         number: "03",
         title: "Make It Work",
-        description: "Then we build. Every automation is designed to fit naturally into how you already work. Simple and Practical.",
-        image: "/image 48.png",
-        isRotated: false,
+        description: "We build automations designed to fit naturally into how you already work. Simple and practical.",
+        icon: Wrench,
     },
     {
         number: "04",
         title: "Keep Improving",
         description: "Things change, and so should your systems. We stick around to tweak, refine, and grow your automations as your team grows.",
-        image: "/image 49.png",
-        isRotated: false,
+        icon: TrendingUp,
     },
 ];
 
 export const OurApproachSection = () => {
     return (
-        <section id="approach" className="flex flex-col items-center gap-[66px] py-20 px-4 w-full bg-black">
-            <div className="w-full max-w-[1440px] mx-auto flex flex-col items-center gap-[66px]">
-                <div className="text-center">
-                    <h2 className="[font-family:'Inter',Helvetica] font-bold text-[55px] leading-tight mb-4">
-                        <span className="text-white">OUR </span>
-                        <span className="text-[#6600ff]">APPROACH</span>
+        <section id="approach" className="py-20 px-4 bg-white">
+            <div className="w-full max-w-[1200px] mx-auto">
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                        <span className="text-slate-800">Our </span>
+                        <span className="text-emerald-500">Approach</span>
                     </h2>
-                    <p className="max-w-[663px] mx-auto [font-family:'Inter',Helvetica] font-normal text-white text-2xl leading-relaxed opacity-80">
-                        A proven methodology that ensures successful ai implementation from concept to deployment.
+                    <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                        A proven methodology that ensures successful AI implementation
+                        from concept to deployment.
                     </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-[47px] flex-wrap px-4">
-                    {approachSteps.map((step, index) => (
-                        <div key={index} className="relative w-[296px] h-[509px]">
-                            {/* Card with background image */}
-                            <Card
-                                className={`absolute w-full h-[86.64%] top-[13.36%] left-0 bg-[#0a0222] rounded-[14px] overflow-hidden border-0 ${step.isRotated ? "rotate-180" : ""}`}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {approachSteps.map((step, index) => {
+                        const IconComponent = step.icon;
+                        return (
+                            <div
+                                key={index}
+                                className="relative bg-slate-50 border border-slate-200 rounded-xl p-6 hover:shadow-lg hover:border-emerald-200 transition-all duration-300"
                             >
-                                <CardContent className="p-0 relative h-full">
-                                    <img
-                                        className={`absolute top-0 left-0 w-full h-[441px] object-cover ${step.isRotated ? "-rotate-180" : ""}`}
-                                        alt="Background"
-                                        src={step.image}
-                                    />
-                                    <div
-                                        className={`absolute ${step.isRotated ? "top-[85px]" : "top-[93px]"} left-[9px] w-[278px] flex flex-col ${step.isRotated ? "gap-[54px] rotate-180" : "gap-[73px]"} px-[6px]`}
-                                    >
-                                        <h3
-                                            className={`${step.isRotated ? "order-2" : "order-1"} [font-family:'Inter',Helvetica] font-semibold text-white text-[32px] text-center tracking-[0] leading-[normal]`}
-                                        >
-                                            {step.title}
-                                        </h3>
-                                        <p
-                                            className={`${step.isRotated ? "order-1" : "order-2"} [font-family:'Inter',Helvetica] font-normal text-white text-xl text-center tracking-[0] leading-[normal]`}
-                                        >
-                                            {step.description}
-                                        </p>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                {/* Step number badge */}
+                                <div className="absolute -top-4 left-6 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                                    {step.number}
+                                </div>
 
-                            {/* Number badge */}
-                            <div className="absolute top-[-20px] left-[30%]">
-                                <GlassSurface
-                                    width={null}
-                                    height={null}
-                                    borderRadius={11}
-                                    backgroundOpacity={0}
-                                    className="border border-solid border-[#a975f8] shadow-[inset_0px_0px_26.5px_#5f34fb52,inset_0_1px_0_rgba(255,255,255,0.40),inset_1px_0_0_rgba(255,255,255,0.32),inset_0_-1px_1px_rgba(0,0,0,0.13),inset_-1px_0_1px_rgba(0,0,0,0.11)] px-[22px] py-[22px]"
-                                >
-                                    <span className="[font-family:'JetBrains_Mono',Helvetica] font-normal text-white text-5xl text-center tracking-[0] leading-[normal]">
-                                        {step.number}
-                                    </span>
-                                </GlassSurface>
+                                <div className="mt-4">
+                                    <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+                                        <IconComponent className="w-6 h-6 text-emerald-600" />
+                                    </div>
+                                    <h3 className="text-xl font-semibold text-slate-800 mb-3">
+                                        {step.title}
+                                    </h3>
+                                    <p className="text-slate-600 leading-relaxed text-sm">
+                                        {step.description}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </section>
     );
 };
+
